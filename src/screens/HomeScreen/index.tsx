@@ -1,7 +1,5 @@
-import { Alert, StyleSheet, Text, View } from 'react-native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import DefaultScreen from '../../components/DefaultScreen'
-import CText from '../../components/CustomText'
 import Post from './components/Post'
 import CFlatList from '../../components/CustomFlatList'
 import CustomSearchBar from '../../components/CustomSearchBar'
@@ -18,7 +16,6 @@ type HomeScreenProps = {
 const HomeScreen: React.FC<HomeScreenProps> = (props: HomeScreenProps) => {
   const [data, setData] = useState<IPost[]>([])
   const [temp, setTemp] = useState<IPost[]>([])
-  // const [prevTemp,setPrevtemp] = useState<any[]>([])
   const [search, setSearch] = useState<string>("")
 
   useEffect(() => {
@@ -29,14 +26,14 @@ const HomeScreen: React.FC<HomeScreenProps> = (props: HomeScreenProps) => {
   }, [])
 
   useEffect(() => {
-    let temp : any[] = []
-    if(data.length>0){
+    let temp: any[] = []
+    if (data.length > 0) {
       data.map(x => {
-        x.data.map(item => temp.push({type:x.type,uri:item}))
+        x.data.map(item => temp.push({ type: x.type, uri: item }))
       })
       setTemp(temp)
     }
-  },[data])
+  }, [data])
 
   const getItemLayout = useCallback((data: any, index: any) => {
     return {
@@ -46,7 +43,7 @@ const HomeScreen: React.FC<HomeScreenProps> = (props: HomeScreenProps) => {
     };
   }, [])
 
-  const renderItem = useCallback(({ item,index }: any) => <Post item={item} />, [])
+  const renderItem = useCallback(({ item }: any) => <Post item={item} />, [])
   const keyExtractor = useCallback((item: any) => item.id, [])
 
   return (
@@ -54,13 +51,10 @@ const HomeScreen: React.FC<HomeScreenProps> = (props: HomeScreenProps) => {
       <CustomSearchBar
         onSearch={text => setSearch(text)}
       />
-      { search === "" ?
+      {search === "" ?
         <CFlatList
           initialNumToRender={data.length}
           removeClippedSubviews
-          // maxToRenderPerBatch={data.length}
-          // updateCellsBatchingPeriod={150}
-          // scrollEventThrottle={1000}
           data={data}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
@@ -76,5 +70,3 @@ const HomeScreen: React.FC<HomeScreenProps> = (props: HomeScreenProps) => {
 }
 
 export default HomeScreen
-
-const styles = StyleSheet.create({})
