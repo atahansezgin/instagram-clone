@@ -11,6 +11,7 @@ import CButton from '../../components/CustomButton'
 import Icon from 'react-native-vector-icons/Feather'
 import { Colors } from '../../resources/Colors'
 import { Screens } from '../../routes'
+import * as Keychain from 'react-native-keychain';
 
 type LoginProps = {
   navigation: any
@@ -24,7 +25,16 @@ const LoginScreen: React.FC<LoginProps> = (props: LoginProps) => {
   })
 
   const isUserEmpty = () => user.username === "" || user.password === ""
-  const onLogin = () => props.navigation.push(Screens.home)
+  
+  const onLogin = async() => {
+    await Keychain.setGenericPassword(user.username,user.password)
+    await Keychain.getGenericPassword()
+      .then(credentials => {
+        if(credentials)
+        console.log('Credentials successfully loaded for user ' + credentials.username)
+      })
+      props.navigation.push(Screens.home)
+  }
 
   const onChangeUsername = (text: string) => setUser({ ...user, username: text })
   const onChangePassword = (text: string) => setUser({ ...user, password: text })
