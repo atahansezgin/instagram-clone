@@ -5,6 +5,7 @@ import FastImage from 'react-native-fast-image'
 import { Images } from '../resources/Images'
 import Icon from "./Icon"
 import PressableOpacity from './PressableOpacity'
+import { Colors } from '../resources/Colors'
 
 const CustomStatusBar = () => {
   return (
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
   container:{
     // height:responsiveHeight(36),
     width:SCREEN_WIDTH,
-    backgroundColor:"#fff",
+    backgroundColor:Colors.white,
     padding:12,
     flexDirection:"row",
     alignItems:"center",

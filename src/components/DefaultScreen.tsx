@@ -3,6 +3,7 @@ import React from 'react'
 import { SafeAreaViewProps } from 'react-native-safe-area-context'
 import { SCREEN_HEIGHT } from '../constants/Constants'
 import CustomStatusBar from './CustomStatusBar'
+import { Colors } from '../resources/Colors'
 
 
 type DefaultScreenProps = SafeAreaViewProps & {
@@ -27,6 +28,6 @@ const styles = StyleSheet.create({
   container:{
     flex:1,
     minHeight:SCREEN_HEIGHT,
-    backgroundColor:"#fff",
+    backgroundColor:Colors.white,
   }
 })

@@ -2,6 +2,7 @@ import { StyleSheet, TextInputProps, View, ViewStyle } from 'react-native'
 import React from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import { responsiveHeight } from '../constants/Constants'
+import { Colors } from '../resources/Colors'
 
 type CustomInputProps = TextInputProps & {
   containerStyle?:ViewStyle
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
   input:{
     flex:1,
     fontSize:14,
-    color:"#000",
+    color:Colors.black,
     paddingVertical:0
   }
 })

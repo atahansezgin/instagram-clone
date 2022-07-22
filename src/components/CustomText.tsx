@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TextProps } from 'react-native'
 import React from 'react'
+import { Colors } from '../resources/Colors'
 
 type CustomTextProps = TextProps & {
   children?:any
@@ -21,6 +22,6 @@ export default CText
 const styles = StyleSheet.create({
   text:{
     fontSize:14,
-    color:"#000"
+    color:Colors.black
   }
 })

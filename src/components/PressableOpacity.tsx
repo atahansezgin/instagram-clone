@@ -7,7 +7,7 @@ type PressableOpacityProps = TouchableOpacityProps & {
 
 const PressableOpacity : React.FC<PressableOpacityProps> = (props:PressableOpacityProps) => {
   return (
-    <TouchableOpacity style={{opacity:props.disabled?0.6:1}} {...props} >
+    <TouchableOpacity style={[{opacity:props.disabled?0.6:1},props.style]} {...props} >
       {props.children}
     </TouchableOpacity>
   )

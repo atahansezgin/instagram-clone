@@ -21,7 +21,7 @@ const CustomIndicator : React.FC<CustomIndicatorProps> = (props:CustomIndicatorP
                 width:responsiveHeight(6),
                 height:responsiveHeight(6),
                 borderRadius:100,
-                backgroundColor: index===activeIndex? Colors.blue : "#D0D5D9",
+                backgroundColor: index===activeIndex? Colors.blue : Colors.border,
                 marginRight:10,
                 zIndex:90
               }}

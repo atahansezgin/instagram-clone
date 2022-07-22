@@ -2,6 +2,7 @@ import { StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps } from '
 import React from 'react'
 import CText from './CustomText'
 import { responsiveHeight } from '../constants/Constants'
+import { Colors } from '../resources/Colors'
 
 type CustomButtonProps = TouchableOpacityProps & {
   text:string
@@ -22,7 +23,7 @@ export default CButton
 
 const styles = StyleSheet.create({
   container:{
-    backgroundColor:"#3797EF",
+    backgroundColor:Colors.blue,
     minHeight:responsiveHeight(44),
     minWidth:"100%",
     alignItems:"center",
@@ -31,6 +32,6 @@ const styles = StyleSheet.create({
   label:{
     fontSize:14,
     fontWeight:"600",
-    color:"#fff"
+    color:Colors.white
   }
 })
