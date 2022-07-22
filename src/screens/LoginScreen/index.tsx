@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useCallback, useState } from 'react'
+import { StyleSheet, View } from 'react-native'
+import React, { useState } from 'react'
 import CText from '../../components/CustomText'
 import DefaultScreen from '../../components/DefaultScreen'
 import FastImage from 'react-native-fast-image'
 import { Images } from '../../resources/Images'
-import { responsiveHeight } from '../../constants/Constants'
+import { responsiveHeight, responsiveWidth } from '../../constants/Constants'
 import CInput from '../../components/CustomInput'
 import PressableOpacity from '../../components/PressableOpacity'
 import CButton from '../../components/CustomButton'
@@ -13,7 +13,7 @@ import { Colors } from '../../resources/Colors'
 import { Screens } from '../../routes'
 
 type LoginProps = {
-  navigation:any
+  navigation: any
 }
 
 const LoginScreen: React.FC<LoginProps> = (props: LoginProps) => {
@@ -25,30 +25,50 @@ const LoginScreen: React.FC<LoginProps> = (props: LoginProps) => {
 
   const isUserEmpty = () => user.username === "" || user.password === ""
   const onLogin = () => props.navigation.push(Screens.home)
-  
+
+  const onChangeUsername = (text: string) => setUser({ ...user, username: text })
+  const onChangePassword = (text: string) => setUser({ ...user, password: text })
+
   return (
     <DefaultScreen hideTop>
-      <View style={{ alignItems: "center", padding: 12, marginTop: 168 }}>
+      <View style={styles.container}>
         <FastImage
           source={Images.statusbar_logo}
           style={styles.logo}
           resizeMode={"contain"}
         />
-        <View style={{ marginTop: responsiveHeight(39), marginBottom: responsiveHeight(30) }}>
-          <CInput placeholder='Kullanıcı Adı' containerStyle={styles.input} value={user.username} onChangeText={text => setUser({ ...user, username: text })} />
-          <CInput secureTextEntry placeholder='Parola' containerStyle={styles.input} value={user.password} onChangeText={text => setUser({ ...user, password: text })} />
+        <View style={styles.inputContainer}>
+          <CInput
+            placeholder='Kullanıcı Adı'
+            containerStyle={styles.input}
+            value={user.username}
+            onChangeText={onChangeUsername}
+          />
+          <CInput
+            secureTextEntry
+            placeholder='Parola'
+            containerStyle={styles.input}
+            value={user.password}
+            onChangeText={onChangePassword}
+          />
           <PressableOpacity>
-            <CText style={{ fontSize: 12, color: Colors.blue, fontWeight: "500", marginLeft: "auto", letterSpacing: 0.15 }}>
+            <CText style={styles.forgetPassword}>
               Parolamı unuttum?
             </CText>
           </PressableOpacity>
         </View>
-        <CButton disabled={isUserEmpty()} onPress={onLogin} text='Giriş Yap' />
-        <PressableOpacity
-          style={{alignItems:"center",flexDirection:"row",marginTop:responsiveHeight(39)}}
-        >
-          <Icon name='facebook' size={20} color={Colors.blue} />
-          <CText style={{ fontSize: 14, color:Colors.blue, fontWeight:"600" }}>
+        <CButton
+          disabled={isUserEmpty()}
+          onPress={onLogin}
+          text='Giriş Yap'
+        />
+        <PressableOpacity style={styles.facebookButton}>
+          <Icon
+            name='facebook'
+            size={20}
+            color={Colors.blue}
+          />
+          <CText style={styles.facebookText}>
             {" "}Facebook ile giriş yap
           </CText>
         </PressableOpacity>
@@ -60,15 +80,41 @@ const LoginScreen: React.FC<LoginProps> = (props: LoginProps) => {
 export default LoginScreen
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    padding: 12,
+    marginTop: responsiveHeight(168)
+  },
   logo: {
     height: responsiveHeight(49),
-    width: 182
+    width: responsiveWidth(182)
+  },
+  inputContainer: {
+    marginTop: responsiveHeight(39),
+    marginBottom: responsiveHeight(30),
   },
   input: {
-    backgroundColor: "#fafafa",
+    backgroundColor: Colors.backgrounWhite,
     borderWidth: 1,
-    borderColor: "#D0D5D9",
+    borderColor: Colors.border,
     borderRadius: 5,
-    marginBottom: 10
+    marginBottom: responsiveHeight(10)
+  },
+  forgetPassword: {
+    fontSize: 12,
+    color: Colors.blue,
+    fontWeight: "500",
+    marginLeft: "auto",
+    letterSpacing: 0.15
+  },
+  facebookButton: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginTop: responsiveHeight(39)
+  },
+  facebookText: {
+    fontSize: 14,
+    color: Colors.blue,
+    fontWeight: "600"
   }
 })
