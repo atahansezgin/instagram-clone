@@ -5,6 +5,7 @@ import Icon from "./Icon"
 import { responsiveHeight, responsiveWidth } from '../constants/Constants'
 
 type CustomSearchBarProps = {
+  value:string
   onSearch:(text:string) => void
   onFocus?:Function
 }
@@ -14,6 +15,7 @@ const CustomSearchBar : React.FC<CustomSearchBarProps> = (props:CustomSearchBarP
     <View style={styles.container}>
       <Icon name='search' size={25} />
       <CInput
+        value={props.value}
         style={{fontSize:16}}
         onFocus={() => props.onFocus ? props.onFocus() : null }
         containerStyle={{marginLeft:responsiveWidth(18)}}

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps, View } from 'react-native'
+import { TouchableOpacity, TouchableOpacityProps } from 'react-native'
 import React from 'react'
 
 type PressableOpacityProps = TouchableOpacityProps & {
@@ -14,5 +14,3 @@ const PressableOpacity : React.FC<PressableOpacityProps> = (props:PressableOpaci
 }
 
 export default PressableOpacity
-
-const styles = StyleSheet.create({})

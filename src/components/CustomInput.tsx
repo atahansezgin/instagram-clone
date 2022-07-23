@@ -1,7 +1,7 @@
 import { StyleSheet, TextInputProps, View, ViewStyle } from 'react-native'
 import React from 'react'
 import { TextInput } from 'react-native-gesture-handler'
-import { responsiveHeight } from '../constants/Constants'
+import { responsiveHeight, responsiveWidth } from '../constants/Constants'
 import { Colors } from '../resources/Colors'
 
 type CustomInputProps = TextInputProps & {
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     minHeight:responsiveHeight(44),
     maxHeight:responsiveHeight(44),
     minWidth:"100%",
-    paddingLeft:10,
+    paddingLeft:responsiveWidth(10),
     justifyContent:"center",
   },
   input:{

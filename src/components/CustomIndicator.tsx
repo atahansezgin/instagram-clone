@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native'
+import { View } from 'react-native'
 import React from 'react'
 import { Colors } from '../resources/Colors'
 import { responsiveHeight } from '../constants/Constants'
@@ -34,5 +34,3 @@ const CustomIndicator : React.FC<CustomIndicatorProps> = (props:CustomIndicatorP
 }
 
 export default CustomIndicator
-
-const styles = StyleSheet.create({})

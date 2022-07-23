@@ -1,4 +1,3 @@
-import { StyleSheet } from 'react-native'
 import React, { memo, useState } from 'react'
 import Video, { VideoProperties } from 'react-native-video'
 import PressableOpacity from './PressableOpacity'
@@ -9,8 +8,10 @@ type CustomVideoProps = VideoProperties & {
 
 const CustomVideo : React.FC<CustomVideoProps> = (props:CustomVideoProps) => {
   const [paused,setPaused] = useState(props.autoPlay ? false : true)
+
+  const onPause = () => setPaused(!paused)
   return (
-    <PressableOpacity activeOpacity={0.8} style={props.style} onPress={() => setPaused(!paused)}>
+    <PressableOpacity activeOpacity={0.8} style={props.style} onPress={onPause}>
       <Video
       {...props}
       paused={paused}
@@ -20,5 +21,3 @@ const CustomVideo : React.FC<CustomVideoProps> = (props:CustomVideoProps) => {
 }
 
 export default memo(CustomVideo)
-
-const styles = StyleSheet.create({})
