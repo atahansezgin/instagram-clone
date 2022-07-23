@@ -21,9 +21,9 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
   const [loading, setLoading] = useState(true)
   const [liked,setLiked] = useState(false)
 
-  const onLike = useCallback(() => setLiked(!liked),[])
-  const onPageSelected = useCallback((e:any) => setActiveIndex(e.nativeEvent.position),[])
-  const onLoadEnd = useCallback(() => setLoading(false),[])
+  const onLike = () => setLiked(!liked)
+  const onPageSelected = (e:any) => setActiveIndex(e.nativeEvent.position)
+  const onLoadEnd = () => setLoading(false)
 
   return (
     <View style={styles.container}>
@@ -74,7 +74,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
       <View style={styles.buttonContainer}>
         <View style={styles.buttons}>
           <PressableOpacity style={styles.button} onPress={onLike}>
-            <Icon name='heart' size={25} color={liked ? "red" : "#000"} />
+            <Icon name='heart' size={25} color={liked ? Colors.red : Colors.black} />
           </PressableOpacity>
           <PressableOpacity style={styles.button}>
             <Icon name='message-circle' size={25} />

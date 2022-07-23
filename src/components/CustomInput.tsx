@@ -11,7 +11,12 @@ type CustomInputProps = TextInputProps & {
 const CInput : React.FC<CustomInputProps> = (props:CustomInputProps) => {
   return (
     <View style={[styles.container,props.containerStyle]}>
-      <TextInput textAlignVertical="center" {...props} style={[styles.input,props.style]} />
+      <TextInput 
+        placeholderTextColor={props.placeholderTextColor || Colors.placeHolder} 
+        textAlignVertical="center" 
+        {...props} 
+        style={[styles.input,props.style]} 
+      />
     </View>
   )
 }

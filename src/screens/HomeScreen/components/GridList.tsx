@@ -24,7 +24,7 @@ const GridList: React.FC<GridListProps> = (props: GridListProps) => {
     };
   }, [])
   const renderItem = useCallback(
-    ({ item,index }: {item:{type:"IMAGE" | "VIDEO",uri:string},index:number}) => <GridComponent item={item} style={{
+    ({ item,index }: {item:{type:"IMAGE" | "VIDEO",uri:string},index:number}) => <GridComponent key={index} item={item} style={{
       marginBottom:responsiveHeight(5),
       marginRight:index%3 !== 2 ? responsiveWidth(5) : 0
     }} />

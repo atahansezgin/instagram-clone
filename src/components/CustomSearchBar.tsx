@@ -1,26 +1,32 @@
-import { StyleSheet, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, TextInputProps, View } from 'react-native'
+import React, { useState } from 'react'
 import CInput from './CustomInput'
 import Icon from "./Icon"
 import { responsiveHeight, responsiveWidth } from '../constants/Constants'
+import PressableOpacity from './PressableOpacity'
 
-type CustomSearchBarProps = {
-  value:string
-  onSearch:(text:string) => void
-  onFocus?:Function
+type CustomSearchBarProps = TextInputProps & {
+  onSearch: () => void
 }
 
-const CustomSearchBar : React.FC<CustomSearchBarProps> = (props:CustomSearchBarProps) => {
+const CustomSearchBar: React.FC<CustomSearchBarProps> = (props: CustomSearchBarProps) => {
+  const { onSearch } = props
+  const [searchClicked, setSearchClicked] = useState(false)
+
+  const onSearchClicked = () => {
+    setSearchClicked(true)
+    onSearch()
+    setTimeout(() => setSearchClicked(false), 2000)
+  }
   return (
     <View style={styles.container}>
-      <Icon name='search' size={25} />
+      <PressableOpacity disabled={searchClicked} onPress={onSearchClicked}>
+        <Icon name='search' size={25} />
+      </PressableOpacity>
       <CInput
-        value={props.value}
-        style={{fontSize:16}}
-        onFocus={() => props.onFocus ? props.onFocus() : null }
-        containerStyle={{marginLeft:responsiveWidth(18)}}
+        {...props}
+        style={{ fontSize: 16 }}
         placeholder='Ara'
-        onChangeText={text => props.onSearch(text)}
       />
     </View>
   )
@@ -29,10 +35,10 @@ const CustomSearchBar : React.FC<CustomSearchBarProps> = (props:CustomSearchBarP
 export default CustomSearchBar
 
 const styles = StyleSheet.create({
-  container:{
-    paddingHorizontal:responsiveWidth(24),
-    paddingVertical:responsiveHeight(6),
-    flexDirection:"row",
-    alignItems:"center",
+  container: {
+    paddingHorizontal: responsiveWidth(12),
+    paddingVertical: responsiveHeight(6),
+    flexDirection: "row",
+    alignItems: "center",
   }
 })
