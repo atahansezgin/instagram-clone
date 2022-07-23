@@ -5,8 +5,9 @@ import CFlatList from '../../components/CustomFlatList'
 import CustomSearchBar from '../../components/CustomSearchBar'
 import axios from 'axios'
 import GridList from './components/GridList'
-import { SCREEN_WIDTH } from '../../constants/Constants'
+import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants/Constants'
 import { IPost } from '../../models/Post'
+import { BackHandler } from 'react-native'
 
 type HomeScreenProps = {
   navigation?: any
@@ -15,25 +16,36 @@ type HomeScreenProps = {
 
 const HomeScreen: React.FC<HomeScreenProps> = (props: HomeScreenProps) => {
   const [data, setData] = useState<IPost[]>([])
-  const [temp, setTemp] = useState<IPost[]>([])
+  const [temp, setTemp] = useState<{type:"IMAGE"|"VIDEO",uri:string}[]>([])
   const [search, setSearch] = useState<string>("")
+  const [activeIndex,setActiveIndex] = useState(4)
 
   useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", () => {
+      setSearch("")
+      return true
+    })
     axios.get("https://62d7280551e6e8f06f19749f.mockapi.io/api/posts")
       .then((res) => {
         setData(res.data)
+        let temp : any[] = []
+        res.data.map((x:any) => {
+          x.data.map((item:any) => temp.push({ type: x.type, uri: item }))
+        })
+        setTemp(temp)
       })
   }, [])
 
-  useEffect(() => {
-    let temp: any[] = []
-    if (data.length > 0) {
-      data.map(x => {
-        x.data.map(item => temp.push({ type: x.type, uri: item }))
-      })
-      setTemp(temp)
-    }
-  }, [data])
+  const onSearch = (text:string) => {
+    setSearch(text)
+    setTimeout(shuffleData,300)
+  }
+
+  const shuffleData = () => {
+    let newArr = temp.slice()
+    newArr.sort((a, b) => Math.random() - 0.5)
+    setTemp(newArr)
+  }
 
   const getItemLayout = useCallback((data: any, index: any) => {
     return {
@@ -43,19 +55,24 @@ const HomeScreen: React.FC<HomeScreenProps> = (props: HomeScreenProps) => {
     };
   }, [])
 
+  const loadAgain = () => {
+    setActiveIndex(prevState => prevState + 4)
+  }
+
   const renderItem = useCallback(({ item }: any) => <Post item={item} />, [])
   const keyExtractor = useCallback((item: any) => item.id, [])
+  const onEndReached = useCallback(loadAgain,[])
 
   return (
     <DefaultScreen>
       <CustomSearchBar
-        onSearch={text => setSearch(text)}
+        value={search}
+        onSearch={onSearch}
       />
       {search === "" ?
         <CFlatList
-          initialNumToRender={data.length}
-          removeClippedSubviews
-          data={data}
+          data={data.slice(0,activeIndex)}
+          onEndReached={onEndReached}
           keyExtractor={keyExtractor}
           renderItem={renderItem}
           getItemLayout={getItemLayout}

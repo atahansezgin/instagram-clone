@@ -1,14 +1,22 @@
-import { ActivityIndicator, StyleSheet, View } from 'react-native'
-import React, { memo, useState } from 'react'
+import { ActivityIndicator, StyleSheet, View, ViewStyle } from 'react-native'
+import React, { memo, useCallback, useState } from 'react'
 import FastImage from 'react-native-fast-image'
 import { SCREEN_WIDTH } from '../../../constants/Constants'
-import Video from 'react-native-video'
 import CustomVideo from '../../../components/CustomVideo'
 
-const GridComponent = (props: { item: { type: "IMAGE" | "VIDEO", uri: string } }) => {
+type GridComponentProps = {
+  item: {
+    type: "IMAGE" | "VIDEO",
+    uri: string
+  },
+  style?: ViewStyle
+}
+
+const GridComponent: React.FC<GridComponentProps> = (props: GridComponentProps) => {
   const [loaded, setLoaded] = useState(false)
+  const onLoadEnd = useCallback(() => setLoaded(true),[])
   return (
-    <View>
+    <View style={props.style}>
       {
         props.item.type === "IMAGE" ?
           <FastImage
@@ -17,24 +25,18 @@ const GridComponent = (props: { item: { type: "IMAGE" | "VIDEO", uri: string } }
               priority: FastImage.priority.normal,
             }}
             style={styles.image}
-            onLoadEnd={() => setLoaded(true)}
+            onLoadEnd={onLoadEnd}
           />
           :
           <CustomVideo
-          onLoad={() => setLoaded(true)}
-          source={{uri:props.item.uri}}
-          style={styles.image}
-          muted
-          repeat
+            autoPlay
+            onLoad={onLoadEnd}
+            source={{ uri: props.item.uri }}
+            style={styles.image}
+            muted
+            repeat
           />
       }
-
-      {/* <Video
-        muted
-        source={{uri:"https://player.vimeo.com/external/505901525.sd.mp4?s=6a8294684fe4e4329f1aba53478009d9313a17f0&profile_id=165&oauth2_token_id=57447761"}}
-        onReadyForDisplay={() => setLoaded(true)}
-        style={stles.image}
-      /> */}
       <ActivityIndicator
         animating={!loaded}
         style={styles.indicator}

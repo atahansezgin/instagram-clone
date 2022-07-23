@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     marginBottom: responsiveHeight(30),
   },
   input: {
-    backgroundColor: Colors.backgrounWhite,
+    backgroundColor: Colors.backgroundWhite,
     borderWidth: 1,
     borderColor: Colors.border,
     borderRadius: 5,

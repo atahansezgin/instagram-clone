@@ -1,7 +1,7 @@
 import { StyleSheet, View, ActivityIndicator, TouchableHighlight } from 'react-native'
-import React, { memo, useRef, useState } from 'react'
+import React, { memo, useCallback, useRef, useState } from 'react'
 import FastImage from 'react-native-fast-image'
-import { SCREEN_WIDTH } from '../../../constants/Constants'
+import { responsiveHeight, responsiveWidth, SCREEN_WIDTH } from '../../../constants/Constants'
 import PagerView from 'react-native-pager-view';
 import CText from '../../../components/CustomText';
 import PressableOpacity from '../../../components/PressableOpacity';
@@ -9,6 +9,7 @@ import Icon from "../../../components/Icon"
 import { IPost } from '../../../models/Post';
 import CustomIndicator from '../../../components/CustomIndicator';
 import CustomVideo from '../../../components/CustomVideo';
+import { Colors } from '../../../resources/Colors';
 
 type PostProps = {
   item: IPost,
@@ -19,6 +20,11 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const [loading, setLoading] = useState(true)
   const [liked,setLiked] = useState(false)
+
+  const onLike = useCallback(() => setLiked(!liked),[])
+  const onPageSelected = useCallback((e:any) => setActiveIndex(e.nativeEvent.position),[])
+  const onLoadEnd = useCallback(() => setLoading(false),[])
+
   return (
     <View style={styles.container}>
       <View style={styles.userContainer}>
@@ -36,7 +42,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
               orientation="horizontal"
               initialPage={0}
               style={styles.image}
-              onPageSelected={e => setActiveIndex(e.nativeEvent.position)}
+              onPageSelected={onPageSelected}
             >
               {
                 data.map((item, index) => {
@@ -45,7 +51,7 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
                       <FastImage
                         source={{ uri: item }}
                         style={styles.image}
-                        onLoadEnd={() => setLoading(false)}
+                        onLoadEnd={onLoadEnd}
                       />
                       <ActivityIndicator style={styles.activityIndicator}
                         animating={loading} />
@@ -65,9 +71,9 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
           />
       }
 
-      <View style={{ alignItems: "center", flexDirection: "row", padding: 10 }}>
-        <View style={{ alignItems: "center", flexDirection: "row" }}>
-          <PressableOpacity style={styles.button} onPress={() => setLiked(!liked)}>
+      <View style={styles.buttonContainer}>
+        <View style={styles.buttons}>
+          <PressableOpacity style={styles.button} onPress={onLike}>
             <Icon name='heart' size={25} color={liked ? "red" : "#000"} />
           </PressableOpacity>
           <PressableOpacity style={styles.button}>
@@ -79,18 +85,18 @@ const Post: React.FC<PostProps> = (props: PostProps) => {
         </View>
         {
           data.length > 1 ?
-            <View style={{ position: "absolute", width: SCREEN_WIDTH, alignItems: "center" }}>
+            <View style={styles.sliderIndicator}>
               <CustomIndicator data={data} activeIndex={activeIndex} />
             </View>
             :
             null
         }
-        <PressableOpacity style={{ marginLeft: "auto" }}>
+        <PressableOpacity style={styles.bookmark}>
           <Icon name='bookmark' size={25} />
         </PressableOpacity>
       </View>
-      <View style={{ paddingVertical: 5, paddingHorizontal: 10 }}>
-        <CText style={{ fontSize: 12, fontWeight: "700", marginBottom: 5 }}>
+      <View style={styles.descriptionContainer}>
+        <CText style={styles.like}>
           1800 Beğenme
         </CText>
         <CText style={{ fontSize: 12 }}>
@@ -109,13 +115,19 @@ export default memo(Post)
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
+    marginBottom: responsiveHeight(10),
   },
   userContainer: {
-    padding: 10, flexDirection: "row", alignItems: "center"
+    paddingVertical: responsiveHeight(10),
+    paddingHorizontal: responsiveWidth(10) ,
+    flexDirection: "row", 
+    alignItems: "center"
   },
   avatar: {
-    width: 30, height: 30, borderRadius: 100, marginRight: 10
+    width: responsiveHeight(30), 
+    height: responsiveHeight(30), 
+    borderRadius: 100, 
+    marginRight: responsiveWidth(10)
   },
   username: {
     fontSize: 14
@@ -123,7 +135,7 @@ const styles = StyleSheet.create({
   image: {
     width: SCREEN_WIDTH,
     height: SCREEN_WIDTH,
-    backgroundColor: "#e1e1e1"
+    backgroundColor: Colors.backgroundGray
   },
   activityIndicator: {
     position: 'absolute',
@@ -133,6 +145,34 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   button: {
-    marginRight: 10,
+    marginRight: responsiveWidth(10),
+  },
+  sliderIndicator:{
+    position: "absolute", 
+    width: SCREEN_WIDTH, 
+    alignItems: "center"
+  },
+  buttonContainer:{
+    alignItems: "center", 
+    flexDirection: "row", 
+    paddingVertical: responsiveHeight(10),
+    paddingHorizontal: responsiveWidth(10)
+  },
+  buttons:{
+    alignItems: "center", 
+    flexDirection: "row",
+    zIndex:10
+  },
+  bookmark:{
+    marginLeft: "auto"
+  },
+  descriptionContainer:{
+    paddingVertical: responsiveHeight(5), 
+    paddingHorizontal: responsiveWidth(10)
+  },
+  like:{
+    fontSize: 12, 
+    fontWeight: "700", 
+    marginBottom: responsiveHeight(5) 
   }
 })

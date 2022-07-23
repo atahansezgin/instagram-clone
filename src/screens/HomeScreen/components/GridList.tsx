@@ -1,35 +1,44 @@
 import { StyleSheet, View } from 'react-native'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import CFlatList from '../../../components/CustomFlatList'
-import { SCREEN_WIDTH } from '../../../constants/Constants'
+import { responsiveHeight, responsiveWidth, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../../constants/Constants'
 import GridComponent from './GridComponent'
 
 type GridListProps = {
-  data: any[]
+  data: {
+    type:"IMAGE"|"VIDEO",
+    uri:string
+  }[]
 }
 
 const GridList: React.FC<GridListProps> = (props: GridListProps) => {
-  const ITEM_HEIGHT = SCREEN_WIDTH / 3; // fixed height of item component
+  const possibleVisibleItemCount = (SCREEN_HEIGHT/(SCREEN_WIDTH/3))*3
+  const [activeIndex,setActiveIndex] = useState(possibleVisibleItemCount)
+  const loadAgain = useCallback(() => setActiveIndex(prevState => prevState + 6),[])
+
   const getItemLayout = useCallback((data: any, index: any) => {
     return {
-      length: ITEM_HEIGHT,
-      offset: ITEM_HEIGHT * index,
+      length: SCREEN_WIDTH / 3,
+      offset: SCREEN_WIDTH / 3 * index,
       index,
     };
   }, [])
-  const renderItem = useCallback(({ item }: {item:{type:"IMAGE" | "VIDEO",uri:string}}) => <GridComponent item={item} />, [])
+  const renderItem = useCallback(
+    ({ item,index }: {item:{type:"IMAGE" | "VIDEO",uri:string},index:number}) => <GridComponent item={item} style={{
+      marginBottom:responsiveHeight(5),
+      marginRight:index%3 !== 2 ? responsiveWidth(5) : 0
+    }} />
+    ,[])
   const keyExtractor = useCallback((item: any) => props.data.indexOf(item).toString(),[])
-
+  const onEndReached = useCallback(loadAgain,[])
   return (
     <View style={styles.container}>
       <CFlatList
-        initialNumToRender={5}
-        maxToRenderPerBatch={5}
-        updateCellsBatchingPeriod={10}
+        onEndReached={onEndReached}
         style={styles.list}
         getItemLayout={getItemLayout}
         numColumns={3}
-        data={props.data}
+        data={props.data.slice(0,activeIndex)}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
       />
